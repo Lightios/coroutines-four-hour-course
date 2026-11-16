@@ -1,1 +1,3 @@
-# Coroutines Workshop: Accompanying materials and exercises
+# Coroutines Workshop
+
+Accompanying materials and exercises.
