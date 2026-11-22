@@ -12,6 +12,7 @@ suspend fun main() = coroutineScope {
         while (true) {
             val result = doCpuHeavyWork(200.milliseconds)
             println("Done (${index++}): $result")
+            yield()
         }
     }
 

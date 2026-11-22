@@ -11,6 +11,7 @@ suspend fun main() = coroutineScope {
             try {
                 doSomeWorkThatMayFail()
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 println("Oops! ${e.message}")
             }
         }
