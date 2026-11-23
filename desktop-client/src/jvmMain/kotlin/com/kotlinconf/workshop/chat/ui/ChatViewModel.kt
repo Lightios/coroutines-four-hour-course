@@ -28,7 +28,12 @@ class ChatViewModel(private val chatService: ChatService) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            // TODO
+            chatService.observeMessageEvents().collect { newMessage ->
+                if (newMessage.isImportant())
+                    importantMessages.update { it + newMessage }
+                else
+                    allOtherMessages.update { it + newMessage }
+            }
         }
     }
 }

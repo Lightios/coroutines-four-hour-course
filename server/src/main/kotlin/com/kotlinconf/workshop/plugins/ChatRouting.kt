@@ -4,9 +4,12 @@ import com.kotlinconf.workshop.ChatMessage
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
+import jdk.internal.joptsimple.internal.Messages.message
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 fun Application.configureChatRouting(chat: Chat = Chat()) {
@@ -25,9 +28,16 @@ suspend fun handleSocket(
     coroutineScope {
         launch {
             // use socket.receiveDeserialized<ChatMessage>() to receive a message from the WebSocket
+            while (true) {
+                val message = socket.receiveDeserialized<ChatMessage>()
+                chat.broadcastMessage(message)
+            }
         }
         launch {
             // use socket.sendSerialized(message) to send a message to the WebSocket
+            chat.messageFlow.collect {
+                socket.sendSerialized(it)
+            }
         }
     }
 }
