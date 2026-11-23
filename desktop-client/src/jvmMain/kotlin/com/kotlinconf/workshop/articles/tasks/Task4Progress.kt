@@ -7,5 +7,7 @@ import kotlinx.coroutines.flow.flow
 
 // Task: Implement loading of articles and comments using flows (with progress!)
 fun observeArticlesLoading(service: BlogService): Flow<Article> = flow {
-    TODO()
+    service.getArticleInfoList().forEach {
+        emit(Article(it, service.getComments(it)))
+    }
 }
